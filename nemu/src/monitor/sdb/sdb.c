@@ -61,11 +61,11 @@ static int cmd_info(char *args)
   }
   else
   {
-    //TODO breakpoint
+    show_point();
   }
   return 0;
 }
-
+ 
 static int cmd_x(char *args)
 {
     if(args == NULL)
@@ -87,7 +87,25 @@ static int cmd_x(char *args)
 static int cmd_p(char *args)
 {
   bool success;
-  expr(args,&success);
+  word_t ans=expr(args,&success);
+  printf("%lu\n",ans);
+  return 0;
+}
+static int cmd_w(char *args)
+{
+  bool success;
+  int id=add_point(args,&success);
+  printf("Hardware watchpoint %d:%s\n\n",id,args);
+  if(success==false)
+    return -1;
+  return 0;
+}
+static int cmd_d(char *args)
+{
+  int id;
+  sscanf(args,"%d",&id);
+  del_point(id);
+  printf("free successfully\n");
   return 0;
 }
 static int cmd_help(char *args);
@@ -103,7 +121,9 @@ static struct {
   { "si", "Single step", cmd_si},
   { "info", "Check the register or breakpoint status", cmd_info},
   { "x", "Check the memory content", cmd_x},
-  { "p", "Calculate the value of expression", cmd_p}
+  { "p", "Calculate the value of expression", cmd_p},
+  { "w", "Set watchpoint", cmd_w},
+  { "d", "Delete watchpoint",cmd_d}
   /* TODO: Add more commands */
 
 };
