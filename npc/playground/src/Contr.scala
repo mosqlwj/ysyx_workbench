@@ -14,8 +14,13 @@ class Contr extends Module {
     //val Branch=Output(Bool())
   })
 
+  val ebreak_in=Wire(UInt(1.W));
+  var ebreakbox=Module(new EbreakBox);
+  ebreak_in := MuxLookup(io.Inst,0.U,Array("h00100073".U -> 1.U));
+  ebreakbox.io.ebreak_in := ebreak_in;
+
   val opcode = io.Inst(6,0);
   io.RegWrite := MuxLookup(opcode,false.B,Array("h13".U -> true.B));
   io.AluOp := MuxLookup(opcode,0x0.U(5.W),Array("h13".U -> 0x1.U(4.W)));
-  io.AluSrc := MuxLookup(opcode,false.B,Array("h13".U -> true.B));
+  io.AluSrc := MuxLookup(opcode,false.B,Array("h13".U -> false.B));
 }

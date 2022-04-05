@@ -5,20 +5,23 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VADD_H_
-#define VERILATED_VADD_H_  // guard
+#ifndef VERILATED_VMAIN_H_
+#define VERILATED_VMAIN_H_  // guard
 
 #include "verilated.h"
+#include "svdpi.h"
 
-class Vadd__Syms;
-class Vadd___024root;
+class VMain__Syms;
+class VMain___024root;
 class VerilatedVcdC;
+class VMain___024unit;
+
 
 // This class is the main interface to the Verilated model
-class Vadd VL_NOT_FINAL {
+class VMain VL_NOT_FINAL {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vadd__Syms* const vlSymsp;
+    VMain__Syms* const vlSymsp;
 
   public:
 
@@ -27,29 +30,39 @@ class Vadd VL_NOT_FINAL {
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clock,0,0);
     VL_IN8(&reset,0,0);
-    VL_IN64(&io_value1,63,0);
-    VL_IN64(&io_value2,63,0);
-    VL_OUT64(&io_output,63,0);
+    VL_OUT8(&io_RegWrite,0,0);
+    VL_OUT8(&io_AluOp,4,0);
+    VL_OUT8(&io_AluSrc,0,0);
+    VL_OUT8(&io_R1,4,0);
+    VL_OUT8(&io_R2,4,0);
+    VL_OUT8(&io_Rdest,4,0);
+    VL_IN(&io_Inst,31,0);
+    VL_OUT64(&io_PcVal,63,0);
+    VL_OUT64(&io_AluOut,63,0);
+    VL_OUT64(&io_DataR1,63,0);
+    VL_OUT64(&io_DataR2,63,0);
+    VL_OUT64(&io_DataImmI,63,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
+    VMain___024unit* const __PVT____024unit;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vadd___024root* const rootp;
+    VMain___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vadd(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vadd(const char* name = "TOP");
+    explicit VMain(VerilatedContext* contextp, const char* name = "TOP");
+    explicit VMain(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vadd();
+    virtual ~VMain();
   private:
-    VL_UNCOPYABLE(Vadd);  ///< Copying not allowed
+    VL_UNCOPYABLE(VMain);  ///< Copying not allowed
 
   public:
     // API METHODS

@@ -4,33 +4,37 @@
 // Internal details; most calling programs do not need this header,
 // unless using verilator public meta comments.
 
-#ifndef VERILATED_VADD__SYMS_H_
-#define VERILATED_VADD__SYMS_H_  // guard
+#ifndef VERILATED_VMAIN__SYMS_H_
+#define VERILATED_VMAIN__SYMS_H_  // guard
 
 #include "verilated.h"
 
 // INCLUDE MODEL CLASS
 
-#include "Vadd.h"
+#include "VMain.h"
 
 // INCLUDE MODULE CLASSES
-#include "Vadd___024root.h"
+#include "VMain___024root.h"
+#include "VMain___024unit.h"
+
+// DPI TYPES for DPI Export callbacks (Internal use)
 
 // SYMS CLASS (contains all model state)
-class Vadd__Syms final : public VerilatedSyms {
+class VMain__Syms final : public VerilatedSyms {
   public:
     // INTERNAL STATE
-    Vadd* const __Vm_modelp;
+    VMain* const __Vm_modelp;
     bool __Vm_activity = false;  ///< Used by trace routines to determine change occurred
     uint32_t __Vm_baseCode = 0;  ///< Used by trace routines when tracing multiple models
     bool __Vm_didInit = false;
 
     // MODULE INSTANCE STATE
-    Vadd___024root                 TOP;
+    VMain___024root                TOP;
+    VMain___024unit                TOP____024unit;
 
     // CONSTRUCTORS
-    Vadd__Syms(VerilatedContext* contextp, const char* namep, Vadd* modelp);
-    ~Vadd__Syms();
+    VMain__Syms(VerilatedContext* contextp, const char* namep, VMain* modelp);
+    ~VMain__Syms();
 
     // METHODS
     const char* name() { return TOP.name(); }

@@ -2,7 +2,7 @@
 # DESCRIPTION: Verilator output: Make include file with class lists
 #
 # This file lists generated Verilated files, for including in higher level makefiles.
-# See Vadd.mk for the caller.
+# See VMain.mk for the caller.
 
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
@@ -25,26 +25,33 @@ VM_TRACE_FST_WRITER_THREAD = 0
 ### Object file lists...
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
-	Vadd \
-	Vadd___024root__DepSet_h53499b2f__0 \
+	VMain \
+	VMain___024root__DepSet_hda8ec1d0__0 \
+	VMain___024root__DepSet_h3502859f__0 \
+	VMain___024unit__DepSet_ha798475c__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vadd___024root__Slow \
-	Vadd___024root__DepSet_h53499b2f__0__Slow \
+	VMain___024root__Slow \
+	VMain___024root__DepSet_hda8ec1d0__0__Slow \
+	VMain___024root__DepSet_h3502859f__0__Slow \
+	VMain___024unit__Slow \
+	VMain___024unit__DepSet_hca18071b__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
-	Vadd__Trace__0 \
+	VMain__Dpi \
+	VMain__Trace__0 \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
 VM_SUPPORT_SLOW += \
-	Vadd__Syms \
-	Vadd__Trace__0__Slow \
+	VMain__Syms \
+	VMain__Trace__0__Slow \
 
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \
 	verilated \
+	verilated_dpi \
 	verilated_vcd_c \
 
 # Global classes, need linked once per executable, non-fast-path, compile with low/medium optimization
