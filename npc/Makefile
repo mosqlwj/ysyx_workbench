@@ -3,6 +3,8 @@ mill = ./mill/mill
 TOPNAME = Main
 CSRCNAME = main
 VSRCNAME = Main
+IMG = ""
+
 
 test:
 	$(mill) -i __.test
@@ -34,9 +36,12 @@ clean:
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator --trace --cc --exe ./csrc/$(CSRCNAME).cpp ./vsrc/$(VSRCNAME).v ./vsrc/EbreakBox.v 
+	verilator --trace --cc --exe ./csrc/$(CSRCNAME).cpp ./vsrc/$(VSRCNAME).v ./vsrc/Ebreak.v ./vsrc/Mem.v 
 	make -j -C ./obj_dir/ -f V$(TOPNAME).mk V$(TOPNAME)
-	./obj_dir/V$(TOPNAME)	
+	./obj_dir/V$(TOPNAME)	$(IMG)
 	gtkwave waveform.vcd
+
+run:
+	./obj_dir/V$(TOPNAME) $(IMG)
 
 include ../Makefile

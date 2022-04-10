@@ -3,19 +3,19 @@ import chisel3.util._
 /**
   * ebreak
   */
-class EbreakBox extends HasBlackBoxInline {
+class Ebreak extends HasBlackBoxInline {
   val io = IO(new Bundle {
     var ebreak_in=Input(UInt(1.W))
   } ) 
-    setInline("EbreakBox.v",
+    setInline("Ebreak.v",
     s"""
     | import \"DPI-C\" function void ebreak();
-    | module EbreakBox (ebreak_in);
+    | module Ebreak (ebreak_in);
     | input ebreak_in;
-    | always @(*)
+    | always@(*)
     | begin
-    | if(ebreak_in==1'b1)
-    |   ebreak();
+    |   if(ebreak_in)
+    |     ebreak();
     | end
     | endmodule
     """.stripMargin)
