@@ -15,7 +15,7 @@ class Main extends Module {
   val MemWrite=Wire(UInt(1.W))
   val AluOp=Wire(UInt(5.W))
   val PcSrc=Wire(UInt(5.W))
-  val MemToReg=Wire(UInt(1.W))
+  val RinCtl=Wire(UInt(3.W))
   val MemMask=Wire(UInt(8.W))
   val Rdest=Wire(UInt(5.W))
   val R1=Wire(UInt(5.W))
@@ -31,7 +31,7 @@ class Main extends Module {
   MemWrite := idu.io.MemWrite;
   AluOp := idu.io.AluOp;
   PcSrc := idu.io.PcSrc;
-  MemToReg := idu.io.MemToReg;
+  RinCtl := idu.io.RinCtl;
   MemMask := idu.io.MemMask;
   Rdest := idu.io.Rdest;
   R1 := idu.io.R1;
@@ -48,7 +48,7 @@ class Main extends Module {
   exu.io.MemWrite := MemWrite;
   exu.io.AluOp := AluOp;
   exu.io.PcSrc := PcSrc;
-  exu.io.MemToReg := MemToReg;
+  exu.io.RinCtl := RinCtl;
   exu.io.MemMask := MemMask;
   Pc := exu.io.PcVal;
 }
