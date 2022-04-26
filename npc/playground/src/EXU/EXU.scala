@@ -24,24 +24,24 @@ class EXU extends Module {
   var DataR1 = Wire(UInt(64.W));
   var DataR2 = Wire(UInt(64.W));
   var DataIn = Wire(UInt(64.W));
-  val Regs = RegInit(VecInit(Seq.fill(32)(0.U(64.W)) :+ ("h80000000".U(64.W)))) // pc == Regs[32]
+  var Regs = RegInit(VecInit(Seq.fill(32)(0.U(64.W)) :+ ("h80000000".U(64.W)))); // pc == Regs[32]
   var mem = Module(new Mem);
   var pc = Wire(UInt(64.W));
 
   pc := Regs(32);
 
-  DataR1 := Regs(io.R1)
-  DataR2 := Regs(io.R2)
+  DataR1 := Regs(io.R1);
+  DataR2 := Regs(io.R2);
   DataIn := MuxLookup(io.RinCtl,0.U,Array(
     0x0.U -> AluOut,
     0x1.U -> MemOut,
     0x2.U -> (MemOut(31,0).asSInt()).asUInt(),
     0x3.U -> (AluOut(31,0).asSInt()).asUInt()
-  ))
+  ));
   when(io.RegWrite.asBool)
   {
     Regs(io.Rdest) := DataIn;
-  }
+  };
   
   MemOut := mem.io.Rdata;
   mem.io.Raddr := AluOut;
@@ -57,7 +57,7 @@ class EXU extends Module {
     0x3.U -> MuxLookup(AluOut, pc+"h4".U, Array(
       1.U -> (pc.asSInt() + io.Imm(12,0).asSInt()).asUInt()
       ))
-  ))
+  ));
 
   AluOut := MuxLookup(io.AluOp,0.U, Array(
     0x1.U -> (DataR1.asSInt() + io.Imm(11,0).asSInt()).asUInt(), //addi,ld,sd
@@ -65,7 +65,7 @@ class EXU extends Module {
     0x3.U -> (pc + io.Imm), //auipc
     0x4.U -> (pc + "h4".U(64.W)), //jal,jalr
     0x5.U -> ((DataR1 === DataR2).asUInt()) //beq
-  ))
+  ));
 
   io.PcVal := pc;
 }
