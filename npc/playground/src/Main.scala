@@ -21,7 +21,7 @@ class Main extends Module {
   val R1=Wire(UInt(5.W))
   val R2=Wire(UInt(5.W))
   val Imm=Wire(UInt(64.W))
-  
+
   var ifu=Module(new IFU);
   ifu.io.Pc := Pc;
   Inst := ifu.io.Inst;

@@ -24,19 +24,21 @@ class EXU extends Module {
   var DataR1 = Wire(UInt(64.W));
   var DataR2 = Wire(UInt(64.W));
   var DataIn = Wire(UInt(64.W));
-  var Regs = RegInit(VecInit(Seq.fill(32)(0.U(64.W)) :+ ("h80000000".U(64.W)))); // pc == Regs[32]
+  var Regs = RegInit(VecInit(Seq.fill(32)(0.U(64.W)))); // pc == Regs[32]
   var mem = Module(new Mem);
-  var pc = Wire(UInt(64.W));
+  var difftest = Module(new Difftest);
+  var pc = RegInit("h80000000".U(64.W));
 
-  pc := Regs(32);
+  difftest.io.gpr := Regs;
+  difftest.io.PcVal := pc;
 
   DataR1 := Regs(io.R1);
   DataR2 := Regs(io.R2);
   DataIn := MuxLookup(io.RinCtl,0.U,Array(
     0x0.U -> AluOut,
     0x1.U -> MemOut,
-    0x2.U -> (MemOut(31,0).asSInt()).asUInt(),
-    0x3.U -> (AluOut(31,0).asSInt()).asUInt()
+    0x2.U -> Cat(Fill(32, MemOut(31)), MemOut(31,0)).asUInt(),
+    0x3.U -> Cat(Fill(32, AluOut(31)), AluOut(31,0)).asUInt()
   ));
   when(io.RegWrite.asBool)
   {
@@ -50,7 +52,7 @@ class EXU extends Module {
   mem.io.Wmask := io.MemMask;
   mem.io.MemWrite := io.MemWrite;
 
-  Regs(32) := MuxLookup(io.PcSrc, pc+"h4".U, Array(
+  pc := MuxLookup(io.PcSrc, pc+"h4".U, Array(
     0x0.U -> (pc+"h4".U),
     0x1.U -> (pc.asSInt() + io.Imm(20,0).asSInt()).asUInt(), //jal
     0x2.U -> ((DataR1 + io.Imm) & (~(1.U(64.W)))), //jalr
@@ -61,11 +63,15 @@ class EXU extends Module {
 
   AluOut := MuxLookup(io.AluOp,0.U, Array(
     0x1.U -> (DataR1.asSInt() + io.Imm(11,0).asSInt()).asUInt(), //addi,ld,sd
-    0x2.U -> (DataR1.asSInt() + DataR2.asSInt()).asUInt(), //add
-    0x3.U -> (pc + io.Imm), //auipc
+    0x2.U -> (DataR1 + DataR2).asUInt(), //add
+    0x3.U -> (pc.asSInt() + io.Imm(19,0).asSInt()).asUInt(), //auipc
     0x4.U -> (pc + "h4".U(64.W)), //jal,jalr
-    0x5.U -> ((DataR1 === DataR2).asUInt()) //beq
+    0x5.U -> ((DataR1 === DataR2).asUInt()), //beq
+    0x6.U -> ((DataR1 < Cat(Fill(42, io.Imm(11)), io.Imm(11,0))).asUInt()), //sltiu
+    0x7.U -> ((DataR1 =/= DataR2).asUInt()), //bne
+    0x8.U -> ((DataR1- DataR2).asUInt()) //sub
   ));
 
   io.PcVal := pc;
+  Regs(0) := 0.U(64.W);
 }
