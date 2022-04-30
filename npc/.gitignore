@@ -16,6 +16,8 @@ build/
 
 # mill
 out/
+vsrc/
+obj_dir/
 .bsp/
 .idea/
 .idea_modules/
