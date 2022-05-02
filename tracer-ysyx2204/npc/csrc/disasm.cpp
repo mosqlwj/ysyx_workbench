@@ -20,9 +20,7 @@ static llvm::MCDisassembler *gDisassembler = nullptr;
 static llvm::MCSubtargetInfo *gSTI = nullptr;
 static llvm::MCInstPrinter *gIP = nullptr;
 
-void init_disasm(const char *triple) {
-puts(triple);
-
+extern "C" void init_disasm(const char *triple) {
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargetMCs();
   llvm::InitializeAllAsmParsers();
@@ -63,12 +61,13 @@ puts(triple);
   gIP = target->createMCInstPrinter(llvm::Triple(gTriple),
       AsmInfo->getAssemblerDialect(), *AsmInfo, *gMII, *gMRI);
   gIP->setPrintImmHex(true);
+  puts("12323");
 #if LLVM_VERSION_MAJOR >= 11
   gIP->setPrintBranchImmAsAddress(true);
 #endif
 }
 
-void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
+extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
   MCInst inst;
   llvm::ArrayRef<uint8_t> arr(code, nbyte);
   uint64_t dummy_size = 0;
@@ -76,7 +75,6 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
 
   std::string s;
   raw_string_ostream os(s);
-  
   gIP->printInst(&inst, pc, "", *gSTI, os);
 
   int skip = s.find_first_not_of('\t');
