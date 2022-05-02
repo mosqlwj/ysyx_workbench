@@ -82,7 +82,7 @@ int main(int argc, char **argv, char **env)
   init_npc();
 
 #ifdef CONFIG_DIFFTEST
-  init_so("/home/wcx/Desktop/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", size);
+  init_so("/home/wcx/Desktop/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
   while (1)
   {
