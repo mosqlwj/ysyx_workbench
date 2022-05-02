@@ -16,6 +16,7 @@ long ld(char *img_file);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_disasm(const char *triple);
 void print_itrace();
+
 #ifdef CONFIG_ITRACE
 char itrace_buf[16][100] = {0};
 int itrace_buf_cnt = 0;
@@ -76,7 +77,6 @@ void exec_once()
   itrace_buf_cnt++;
   itrace_buf_cnt %= 16;
 #endif
-
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
 #endif
@@ -131,6 +131,5 @@ int main(int argc, char **argv, char **env)
     exec_once();
   }
 
-  exit_npc(0);
   return 0;
 }
