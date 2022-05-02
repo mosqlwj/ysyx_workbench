@@ -1,55 +1,45 @@
 #include "npc.h"
 
-void exit_npc(int flag)
-{
-#ifdef CONFIG_VCD
-  m_trace->close();
-#endif
-  delete top;
-  delete contextp;
-  exit(flag);
-}
-
 void ebreak()
 {
-  puts("Meet ebreak;");
-  printf("%lx\n", cpu_npc.gpr[10]);
-  int flag = 0;
-  if (cpu_npc.gpr[10] == 1)
-    flag = -1;
-
-  exit_npc(flag);
+    puts("Meet ebreak;");
+    printf("%lx\n", cpu_npc.gpr[10]);
+    int flag = 0;
+    if (cpu_npc.gpr[10] == 1)
+        flag = -1;
+    exit_npc(flag);
 }
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r)
 {
-  cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar *)r)->datap());
-  for (int i = 0; i < 32; i++)
-    cpu_npc.gpr[i] = cpu_gpr[i];
-  cpu_npc.pc = cpu_gpr[32];
+    uint64_t *cpu_gpr = NULL;
+    cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar *)r)->datap());
+    for (int i = 0; i < 32; i++)
+        cpu_npc.gpr[i] = cpu_gpr[i];
+    cpu_npc.pc = cpu_gpr[32];
 }
 
 long ld(char *img_file)
 {
-  if (img_file == NULL)
-  {
-    printf("No image is given. Use the default build-in image.");
-    return 4096; // built-in image size
-  }
+    if (img_file == NULL)
+    {
+        printf("No image is given. Use the default build-in image.");
+        return 4096; // built-in image size
+    }
 
-  FILE *fp = fopen(img_file, "rb");
-  assert(fp);
+    FILE *fp = fopen(img_file, "rb");
+    assert(fp);
 
-  fseek(fp, 0, SEEK_END);
-  long size = ftell(fp);
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
 
-  printf("The image is %s, size = %ld \n", img_file, size);
+    printf("The image is %s, size = %ld \n", img_file, size);
 
-  fseek(fp, 0, SEEK_SET);
-  int ret = fread(pmem, size, 1, fp);
-  assert(ret == 1);
+    fseek(fp, 0, SEEK_SET);
+    int ret = fread(pmem, size, 1, fp);
+    assert(ret == 1);
 
-  fclose(fp);
+    fclose(fp);
 
-  return size;
+    return size;
 }

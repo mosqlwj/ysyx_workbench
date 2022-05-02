@@ -1,7 +1,6 @@
 #include "npc.h"
 
 CPU_state cpu_npc;
-uint64_t *cpu_gpr = NULL;
 vluint64_t sim_time = 0;
 VMain *top = nullptr;
 VerilatedContext *contextp = nullptr;
@@ -11,6 +10,16 @@ VerilatedVcdC *m_trace = nullptr;
 
 int check_regs_npc(CPU_state ref_cpu);
 void init_so(char *ref_so_file, long img_size);
+
+void exit_npc(int flag)
+{
+#ifdef CONFIG_VCD
+  m_trace->close();
+#endif
+  delete top;
+  delete contextp;
+  exit(flag);
+}
 
 void cpu_sim_once()
 {
