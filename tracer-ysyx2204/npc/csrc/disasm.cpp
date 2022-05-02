@@ -70,11 +70,11 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
   MCInst inst;
   llvm::ArrayRef<uint8_t> arr(code, nbyte);
   uint64_t dummy_size = 0;
-  assert(gDisassembler);
   gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
 
   std::string s;
   raw_string_ostream os(s);
+  assert(gIP);
   gIP->printInst(&inst, pc, "", *gSTI, os);
 
   int skip = s.find_first_not_of('\t');
