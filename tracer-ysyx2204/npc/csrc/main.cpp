@@ -17,7 +17,7 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_disasm(const char *triple);
 
 #ifdef CONFIG_ITRACE
-char itrace_buf[100] = {0};
+char itrace_buf[16][100] = {0};
 int itrace_buf_cnt = 0;
 #endif
 
@@ -25,6 +25,9 @@ void exit_npc(int flag)
 {
 #ifdef CONFIG_VCD
   m_trace->close();
+#endif
+#ifdef CONFIG_ITRACE
+  print_itrace();
 #endif
   delete top;
   delete contextp;
@@ -45,14 +48,35 @@ void init_npc()
   top->reset = 0;
 }
 
+#ifdef CONFIG_ITRACE
+void print_itrace()
+{
+  puts("itrace:");
+  for (int i = 0; i < 16; i++)
+  {
+    if (strlen(itrace_buf[i]) == 0)
+      break;
+    if ((i + 1) % 16 == itrace_buf_cnt)
+      printf("-->");
+    else
+      printf("   ");
+    printf("%s\n", itrace_buf[i]);
+  }
+}
+#endif
+
 void exec_once()
 {
   cpu_sim_once();
+
 #ifdef CONFIG_ITRACE
   char p[100] = {0};
   disassemble(p, 100, cpu_npc.pc, (uint8_t *)&top->io_Inst, 4);
-  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
+  sprintf(itrace_buf[itrace_buf_cnt], "pc=0x%016lx inst=%08lx %s\n", cpu_npc.pc, top->io_Inst, p);
+  itrace_buf_cnt++;
+  itrace_buf_cnt %= 16;
 #endif
+
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
 #endif
