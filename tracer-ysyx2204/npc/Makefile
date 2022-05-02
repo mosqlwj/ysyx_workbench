@@ -6,8 +6,9 @@ VSRCNAME = Main
 IMG = ""
 SRCDIR = ./
 SRCDIRS = $(shell find $(SRCDIR) -maxdepth 5 -type d)
-CSRC = $(foreach dir, $(SRCDIR), $(wildcard $(dir)/*.cpp))
-VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(SRCDIR), $(wildcard $(dir)/*.v)))
+
+CSRC = $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
+VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.v)))
 
 test:
 	$(mill) -i __.test
