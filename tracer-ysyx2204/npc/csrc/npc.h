@@ -23,7 +23,8 @@ typedef struct
 #define RESET_VECTOR (CONFIG_MBASE + CONFIG_PC_RESET_OFFSET)
 #define CONFIG_DIFFTEST 1
 #define CONFIG_VCD 1
-#define CONFIG_ITRACE 1
+// #define CONFIG_ITRACE 1
+
 #ifdef CONFIG_DIFFTEST
 enum
 {
