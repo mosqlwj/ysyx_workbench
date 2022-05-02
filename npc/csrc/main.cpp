@@ -1,57 +1,26 @@
-#include <stdio.h>
-#include "VMain.h"
-#include "verilated.h"
-#include <verilated_vcd_c.h>
-#include <assert.h>
-#include <stdlib.h>
-#include "VMain__Dpi.h"
-#include "verilated_dpi.h"
-#include <dlfcn.h>
-typedef uint64_t word_t;
-typedef word_t vaddr_t;
-#define CONFIG_MSIZE 0x0020000
-#define CONFIG_MBASE 0x80000000
-#define CONFIG_PC_RESET_OFFSET 0x0
-#define RESET_VECTOR (CONFIG_MBASE + CONFIG_PC_RESET_OFFSET)
-// #define CONFIG_DIFFTEST 1
-// #define CONFIG_VCD 1
-
-#ifdef CONFIG_DIFFTEST
-enum
-{
-  DIFFTEST_TO_DUT,
-  DIFFTEST_TO_REF
-};
-typedef uint32_t paddr_t;
-void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
-void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
-void (*ref_difftest_exec)(uint64_t n) = NULL;
-void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
-void (*ref_difftest_init)() = NULL;
-#endif
-
-typedef struct
-{
-  word_t gpr[32];
-  vaddr_t pc;
-} CPU_state;
+#include "npc.h"
 
 CPU_state cpu_npc;
-
 uint64_t *cpu_gpr = NULL;
-
 vluint64_t sim_time = 0;
 VMain *top = nullptr;
+VerilatedContext *contextp = nullptr;
 #ifdef CONFIG_VCD
 VerilatedVcdC *m_trace = nullptr;
 #endif
-VerilatedContext *contextp = nullptr;
 
-static uint8_t pmem[CONFIG_MSIZE] = {0};
+int check_regs_npc(CPU_state ref_cpu);
+void init_so(char *ref_so_file, long img_size);
 
-uint8_t *guest_to_host(long long paddr) { return pmem + paddr - CONFIG_MBASE; }
-long long host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
-
+void exit_npc(int flag)
+{
+#ifdef CONFIG_VCD
+  m_trace->close();
+#endif
+  delete top;
+  delete contextp;
+  exit(flag);
+}
 void ebreak()
 {
   puts("Meet ebreak;");
@@ -60,13 +29,7 @@ void ebreak()
   if (cpu_npc.gpr[10] == 1)
     flag = -1;
 
-#ifdef CONFIG_VCD
-  m_trace->close();
-#endif
-
-  delete top;
-  delete contextp;
-  exit(flag);
+  exit_npc(flag);
 }
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r)
@@ -75,26 +38,6 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r)
   for (int i = 0; i < 32; i++)
     cpu_npc.gpr[i] = cpu_gpr[i];
   cpu_npc.pc = cpu_gpr[32];
-}
-
-void pmem_read(long long Raddr, long long *Rdata)
-{
-  if (Raddr < CONFIG_MBASE || Raddr >= CONFIG_MSIZE + CONFIG_MBASE)
-    return;
-  (*Rdata) = *((long long *)guest_to_host(Raddr));
-  // printf("READ DATA %lx %lx\n", Raddr, Rdata);
-  return;
-}
-
-void pmem_write(long long Waddr, long long Wdata, char Wmask)
-{
-  for (int i = 0; i < 7; i++)
-  {
-    uint8_t *Vaddr = guest_to_host(Waddr);
-    if ((Wmask >> i) & 1)
-      *((uint8_t *)(Vaddr + i)) = ((Wdata) >> (i * 8)) & (0xFF);
-  }
-  return;
 }
 
 void cpu_sim()
@@ -128,74 +71,12 @@ long ld(char *img_file)
   return size;
 }
 
-#ifdef CONFIG_DIFFTEST
-void init_so(char *ref_so_file, long img_size)
-{
-  assert(ref_so_file != NULL);
-
-  void *handle;
-  handle = dlopen(ref_so_file, RTLD_LAZY);
-  assert(handle);
-
-  ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");
-  assert(ref_difftest_memcpy);
-
-  ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");
-  assert(ref_difftest_regcpy);
-
-  ref_difftest_exec = dlsym(handle, "difftest_exec");
-  assert(ref_difftest_exec);
-
-  ref_difftest_raise_intr = dlsym(handle, "difftest_raise_intr");
-  assert(ref_difftest_raise_intr);
-
-  void (*ref_difftest_init)() = dlsym(handle, "difftest_init");
-  assert(ref_difftest_init);
-
-  printf("The result of every instruction will be compared with %s. "
-         "This will help you a lot for debugging, but also significantly reduce the performance. "
-         "If it is not necessary, you can turn it off in menuconfig.\n",
-         ref_so_file);
-  ref_difftest_init();
-  ref_difftest_memcpy(RESET_VECTOR, pmem, img_size, DIFFTEST_TO_REF);
-  ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF);
-}
-
-void check_regs_npc(CPU_state ref_cpu)
-{
-  for (int i = 0; i < 32; i++)
-  {
-    if (cpu_npc.gpr[i] != ref_cpu.gpr[i])
-    {
-      printf("Missing match reg%d, npc_val=%lx, nemu_val=%lx\n", i, cpu_npc.gpr[i], ref_cpu.gpr[i]);
-#ifdef CONFIG_VCD
-      m_trace->close();
-#endif
-      delete top;
-      delete contextp;
-      exit(-1);
-    }
-  }
-  if (cpu_npc.pc != ref_cpu.pc)
-  {
-    printf("Missing match at pc, npc_val=%lx,nemu_val=%lx\n", cpu_npc.pc, ref_cpu.pc);
-#ifdef CONFIG_VCD
-    m_trace->close();
-#endif
-    delete top;
-    delete contextp;
-    exit(-1);
-  }
-}
-#endif
-
 void init_npc()
 {
   top->reset = 1;
   for (int i = 1; i <= 10; i++)
     cpu_sim();
   top->reset = 0;
-  // cpu_sim();
 }
 
 int main(int argc, char **argv, char **env)
@@ -209,7 +90,6 @@ int main(int argc, char **argv, char **env)
       size = ld(argv[1]);
     }
   }
-
   contextp = new VerilatedContext;
   contextp->commandArgs(argc, argv);
   top = new VMain{contextp};
@@ -226,7 +106,6 @@ int main(int argc, char **argv, char **env)
 #ifdef CONFIG_DIFFTEST
   init_so("/home/wcx/Desktop/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", size);
 #endif
-
   while (1)
   {
     cpu_sim();
@@ -234,19 +113,16 @@ int main(int argc, char **argv, char **env)
     m_trace->dump(sim_time++);
 #endif
 #ifdef CONFIG_DIFFTEST
+    assert(ref_difftest_exec);
     ref_difftest_exec(1);
     CPU_state ref_cpu;
     ref_difftest_regcpy(&ref_cpu, DIFFTEST_TO_DUT);
     printf("check at nemu_pc=%lx, npc_pc=%lx\n", cpu_npc.pc, ref_cpu.pc);
-    check_regs_npc(ref_cpu);
+    if (!check_regs_npc(ref_cpu))
+      exit_npc(-1);
 #endif
   }
 
-#ifdef CONFIG_VCD
-  m_trace->close();
-#endif
-
-  delete top;
-  delete contextp;
+  exit_npc(0);
   return 0;
 }

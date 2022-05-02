@@ -1,10 +1,13 @@
 BUILD_DIR = ./vsrc
+OBJ_DIR = ./obj_dir
 mill = ./mill/mill
 TOPNAME = Main
-CSRCNAME = main
 VSRCNAME = Main
 IMG = ""
-
+CSRCDIRS = ./csrc
+VSRCDIRS = ./vsrc
+CSRC = $(foreach dir, $(CSRCDIRS), $(wildcard $(dir)/*.cpp))
+VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(VSRCDIRS), $(wildcard $(dir)/*.v)))
 
 test:
 	$(mill) -i __.test
@@ -29,19 +32,22 @@ reformat:
 checkformat:
 	$(mill)  -i __.checkFormat
 
-clean:
+clean_vsrc:
 	-rm -rf $(BUILD_DIR)
 
-.PHONY: test verilog help compile bsp reformat checkformat clean
+clean_obj:
+	-rm -rf $(OBJ_DIR)
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator --trace --cc --exe ./csrc/$(CSRCNAME).cpp ./vsrc/$(VSRCNAME).v -I ./vsrc/Mem.v ./vsrc/Difftest.v ./vsrc/Ebreak.v   -CFLAGS -fpermissive -LDFLAGS -ldl -Wno-fatal
-	make -j -C ./obj_dir/ -f V$(TOPNAME).mk V$(TOPNAME)
+	verilator --trace --cc --exe $(CSRC) ./vsrc/$(VSRCNAME).v -I $(VSRC) -CFLAGS -fpermissive  -CFLAGS -I -CFLAGS $$NPC_HOME/csrc/ -LDFLAGS -ldl -Wno-fatal
+	make -j -C ./obj_dir/ -f V$(TOPNAME).mk V$(TOPNAME) 
 	./obj_dir/V$(TOPNAME)	$(IMG)
 	# gtkwave waveform.vcd
 
 run:
 	./obj_dir/V$(TOPNAME) $(IMG)
+
+.PHONY: test verilog help compile bsp reformat checkformat clean_vsrc clean_obj sim run
 
 include ../Makefile
