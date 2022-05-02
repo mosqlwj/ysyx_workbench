@@ -61,7 +61,6 @@ void init_disasm(const char *triple) {
   gIP = target->createMCInstPrinter(llvm::Triple(gTriple),
       AsmInfo->getAssemblerDialect(), *AsmInfo, *gMII, *gMRI);
   gIP->setPrintImmHex(true);
-  puts("12312");
 #if LLVM_VERSION_MAJOR >= 11
   gIP->setPrintBranchImmAsAddress(true);
 #endif
@@ -71,6 +70,7 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
   MCInst inst;
   llvm::ArrayRef<uint8_t> arr(code, nbyte);
   uint64_t dummy_size = 0;
+  puts("12323");
   gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
 
   std::string s;
