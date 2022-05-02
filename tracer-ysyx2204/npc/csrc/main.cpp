@@ -82,6 +82,7 @@ int main(int argc, char **argv, char **env)
   contextp->commandArgs(argc, argv);
   top = new VMain{contextp};
   init_disasm("riscv64-pc-linux-gnu");
+  
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
