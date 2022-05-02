@@ -72,7 +72,7 @@ void exec_once()
 #ifdef CONFIG_ITRACE
   char p[100] = {0};
   disassemble(p, 100, cpu_npc.pc, (uint8_t *)&top->io_Inst, 4);
-  sprintf(itrace_buf[itrace_buf_cnt], "pc=0x%016lx inst=%08lx %s\n", cpu_npc.pc, top->io_Inst, p);
+  sprintf(itrace_buf[itrace_buf_cnt], "pc=0x%016lx inst=%08lx %s", cpu_npc.pc, top->io_Inst, p);
   itrace_buf_cnt++;
   itrace_buf_cnt %= 16;
 #endif
