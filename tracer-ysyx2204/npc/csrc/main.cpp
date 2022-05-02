@@ -125,11 +125,13 @@ int main(int argc, char **argv, char **env)
   top->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 #endif
+
   init_npc();
 
 #ifdef CONFIG_DIFFTEST
   init_so("/home/wcx/Desktop/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
+
   while (1)
   {
     exec_once();
