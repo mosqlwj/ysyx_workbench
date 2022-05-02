@@ -47,7 +47,7 @@ void pmem_write(long long Waddr, long long Wdata, char Wmask)
       *((uint8_t *)(Vaddr + i)) = ((Wdata) >> (i * 8)) & (0xFF);
   }
 #ifdef CONFIG_MTRACE
-  sprintf(mtrace_buf[mtrace_count],"write: addr:%016x Wmask:%02d content:%016lx",Waddr,Wmask,Wdata);
+  sprintf(mtrace_buf[mtrace_count],"write: addr:%016x Wmask:%08d content:%016lx",Waddr,Wmask,Wdata);
   mtrace_count=(mtrace_count+1)%16;
 #endif
   return;
