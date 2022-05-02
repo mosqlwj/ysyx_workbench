@@ -8,9 +8,9 @@ import riscv.EXU._
   */
 class Main extends Module {
   val io = IO(new Bundle {
+    var Inst=Output(UInt(32.W))
   })
   var Pc=Wire(UInt(64.W))
-  var Inst=Wire(UInt(32.W))
   val RegWrite=Wire(UInt(1.W))
   val MemWrite=Wire(UInt(1.W))
   val AluOp=Wire(UInt(5.W))
@@ -26,7 +26,7 @@ class Main extends Module {
 
   var ifu=Module(new IFU);
   ifu.io.Pc := Pc;
-  Inst := ifu.io.Inst;
+  io.Inst := ifu.io.Inst;
   
   var idu=Module(new IDU);
   RegWrite := idu.io.RegWrite;
@@ -39,7 +39,7 @@ class Main extends Module {
   R1 := idu.io.R1;
   R2 := idu.io.R2;
   Imm := idu.io.Imm;
-  idu.io.Inst := Inst;
+  idu.io.Inst := io.Inst;
   AluSrc1Op := idu.io.AluSrc1Op;
   AluSrc2Op := idu.io.AluSrc2Op;
 

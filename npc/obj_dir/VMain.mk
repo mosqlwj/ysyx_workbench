@@ -37,10 +37,13 @@ VM_MODPREFIX = VMain
 VM_USER_CFLAGS = \
 	-fpermissive \
 	-I \
-	/home/wcx/Desktop/ysyx-workbench/npc/csrc/ \
+	/home/wcx/Desktop/ysyx-workbench/npc/csrc/include \
+	-I \
+	/usr/lib/llvm-11/include \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
+	-lLLVM-11 \
 	-ldl \
 
 # User .cpp files (from .cpp's on Verilator command line)
@@ -48,10 +51,16 @@ VM_USER_CLASSES = \
 	difftest \
 	main \
 	mem \
+	disasm \
+	elf \
+	util \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	./csrc \
+	./csrc/difftest \
+	./csrc/mem \
+	./csrc/util \
 
 
 ### Default rules...
@@ -63,11 +72,17 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-difftest.o: ./csrc/difftest.cpp
+difftest.o: ./csrc/difftest/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: ./csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mem.o: ./csrc/mem.cpp
+mem.o: ./csrc/mem/mem.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disasm.o: ./csrc/util/disasm.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+elf.o: ./csrc/util/elf.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+util.o: ./csrc/util/util.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

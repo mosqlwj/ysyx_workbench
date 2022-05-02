@@ -21,14 +21,15 @@ VL_MODULE(VMain___024root) {
     CData/*0:0*/ Main__DOT__idu_io_RegWrite;
     CData/*4:0*/ Main__DOT__idu_io_AluOp;
     CData/*3:0*/ Main__DOT__idu_io_RinCtl;
-    CData/*0:0*/ Main__DOT__idu__DOT___contr_code_T_219;
+    CData/*0:0*/ Main__DOT__idu__DOT___contr_code_T_218;
     CData/*1:0*/ Main__DOT__idu__DOT__contr_code_2;
     CData/*2:0*/ Main__DOT__idu__DOT__contr_code_3;
-    CData/*1:0*/ Main__DOT__idu__DOT___contr_code_T_448;
-    CData/*7:0*/ Main__DOT__idu__DOT___contr_code_T_561;
+    CData/*1:0*/ Main__DOT__idu__DOT___contr_code_T_446;
+    CData/*3:0*/ Main__DOT__idu__DOT___contr_code_T_549;
     CData/*0:0*/ __Vclklast__TOP__clock;
     SData/*11:0*/ Main__DOT__idu__DOT__io_Imm_lo_2;
     SData/*12:0*/ Main__DOT__idu__DOT__io_Imm_lo_8;
+    VL_OUT(io_Inst,31,0);
     IData/*20:0*/ Main__DOT__idu__DOT__io_Imm_lo_6;
     VlWide<4>/*127:0*/ Main__DOT__exu__DOT___AluOut_T_98;
     QData/*63:0*/ Main__DOT__idu_io_Imm;
@@ -75,7 +76,6 @@ VL_MODULE(VMain___024root) {
     QData/*63:0*/ Main__DOT__exu__DOT___pc_T_1;
     QData/*63:0*/ Main__DOT__exu__DOT___pc_T_8;
     QData/*63:0*/ Main__DOT__exu__DOT___pc_T_19;
-    QData/*63:0*/ Main__DOT__exu__DOT___pc_T_23;
     QData/*63:0*/ __Vtask_pmem_read__0__Rdata;
     QData/*63:0*/ __Vtask_pmem_read__2__Rdata;
     VlUnpacked<QData/*63:0*/, 33> Main__DOT__exu__DOT__difftest__DOT__rf;

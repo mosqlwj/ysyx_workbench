@@ -4,8 +4,10 @@ mill = ./mill/mill
 TOPNAME = Main
 VSRCNAME = Main
 IMG = ""
-CSRCDIRS = ./csrc
-VSRCDIRS = ./vsrc
+CSRCDIR = ./csrc
+VSRCDIR = ./vsrc
+CSRCDIRS = $(shell find $(CSRCDIR) -maxdepth 5 -type d)
+VSRCDIRS = $(shell find $(VSRCDIR) -maxdepth 5 -type d)
 CSRC = $(foreach dir, $(CSRCDIRS), $(wildcard $(dir)/*.cpp))
 VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(VSRCDIRS), $(wildcard $(dir)/*.v)))
 
@@ -40,7 +42,7 @@ clean_obj:
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator --trace --cc --exe $(CSRC) ./vsrc/$(VSRCNAME).v -I $(VSRC) -CFLAGS -fpermissive  -CFLAGS -I -CFLAGS $$NPC_HOME/csrc/ -LDFLAGS -ldl -Wno-fatal
+	verilator --trace --cc --exe $(CSRC) ./vsrc/$(VSRCNAME).v -I $(VSRC) -CFLAGS -fpermissive  -CFLAGS -I -CFLAGS $$NPC_HOME/csrc/include -CFLAGS -I -CFLAGS /usr/lib/llvm-11/include -LDFLAGS $(shell llvm-config --libs) -LDFLAGS -ldl -Wno-fatal
 	make -j -C ./obj_dir/ -f V$(TOPNAME).mk V$(TOPNAME) 
 	./obj_dir/V$(TOPNAME)	$(IMG)
 	# gtkwave waveform.vcd

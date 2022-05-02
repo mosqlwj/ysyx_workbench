@@ -1355,8 +1355,9 @@ end // initial
 `endif // SYNTHESIS
 endmodule
 module Main(
-  input   clock,
-  input   reset
+  input         clock,
+  input         reset,
+  output [31:0] io_Inst
 );
   wire [63:0] ifu_io_Pc; // @[Main.scala 27:17]
   wire [31:0] ifu_io_Inst; // @[Main.scala 27:17]
@@ -1424,8 +1425,9 @@ module Main(
     .io_MemMask(exu_io_MemMask),
     .io_PcVal(exu_io_PcVal)
   );
-  assign ifu_io_Pc = exu_io_PcVal; // @[Main.scala 12:14 Main.scala 60:6]
-  assign idu_io_Inst = ifu_io_Inst; // @[Main.scala 13:16 Main.scala 29:8]
+  assign io_Inst = ifu_io_Inst; // @[Main.scala 29:11]
+  assign ifu_io_Pc = exu_io_PcVal; // @[Main.scala 13:14 Main.scala 60:6]
+  assign idu_io_Inst = io_Inst; // @[Main.scala 42:15]
   assign exu_clock = clock;
   assign exu_reset = reset;
   assign exu_io_Rdest = idu_io_Rdest; // @[Main.scala 22:17 Main.scala 38:9]

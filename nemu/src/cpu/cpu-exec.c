@@ -28,12 +28,12 @@ void print_itrace()
   puts("itrace:");
   for (int i = 0; i < 16; i++)
   {
+    if (strlen(iringbuf[i]) == 0)
+      break;
     if ((i + 1) % 16 == iringbuf_count)
       printf("-->");
     else
       printf("   ");
-    if (strlen(iringbuf[i]) == 0)
-      break;
     printf("%s\n", iringbuf[i]);
   }
 #endif

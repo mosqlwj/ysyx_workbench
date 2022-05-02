@@ -23,6 +23,8 @@ void print_mtrace()
   puts("mtrace:");
   for(int i=0;i<16;i++)
   {
+    if(strlen(mtrace_buf[i])==0)
+      break;
     if((i+1)%16==mtrace_count)
       printf("-->");
     else

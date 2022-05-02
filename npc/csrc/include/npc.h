@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+
 typedef uint64_t word_t;
 typedef word_t vaddr_t;
 typedef uint32_t paddr_t;
@@ -20,8 +21,11 @@ typedef struct
 #define CONFIG_MBASE 0x80000000
 #define CONFIG_PC_RESET_OFFSET 0x0
 #define RESET_VECTOR (CONFIG_MBASE + CONFIG_PC_RESET_OFFSET)
-// #define CONFIG_DIFFTEST 1
-// #define CONFIG_VCD 1
+#define CONFIG_DIFFTEST 1
+#define CONFIG_VCD 1
+#define CONFIG_ITRACE 1
+#define CONFIG_MTRACE 1
+#define CONFIG_FTRACE 1
 
 #ifdef CONFIG_DIFFTEST
 enum

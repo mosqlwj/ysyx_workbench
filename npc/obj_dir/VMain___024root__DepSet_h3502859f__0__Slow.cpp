@@ -40,6 +40,7 @@ VL_ATTR_COLD void VMain___024root___ctor_var_reset(VMain___024root* vlSelf) {
     // Body
     vlSelf->clock = VL_RAND_RESET_I(1);
     vlSelf->reset = VL_RAND_RESET_I(1);
+    vlSelf->io_Inst = VL_RAND_RESET_I(32);
     vlSelf->Main__DOT__idu_io_RegWrite = VL_RAND_RESET_I(1);
     vlSelf->Main__DOT__idu_io_AluOp = VL_RAND_RESET_I(5);
     vlSelf->Main__DOT__idu_io_RinCtl = VL_RAND_RESET_I(4);
@@ -48,11 +49,11 @@ VL_ATTR_COLD void VMain___024root___ctor_var_reset(VMain___024root* vlSelf) {
     vlSelf->Main__DOT__idu__DOT__io_Imm_lo_2 = VL_RAND_RESET_I(12);
     vlSelf->Main__DOT__idu__DOT__io_Imm_lo_6 = VL_RAND_RESET_I(21);
     vlSelf->Main__DOT__idu__DOT__io_Imm_lo_8 = VL_RAND_RESET_I(13);
-    vlSelf->Main__DOT__idu__DOT___contr_code_T_219 = VL_RAND_RESET_I(1);
+    vlSelf->Main__DOT__idu__DOT___contr_code_T_218 = VL_RAND_RESET_I(1);
     vlSelf->Main__DOT__idu__DOT__contr_code_2 = VL_RAND_RESET_I(2);
     vlSelf->Main__DOT__idu__DOT__contr_code_3 = VL_RAND_RESET_I(3);
-    vlSelf->Main__DOT__idu__DOT___contr_code_T_448 = VL_RAND_RESET_I(2);
-    vlSelf->Main__DOT__idu__DOT___contr_code_T_561 = VL_RAND_RESET_I(8);
+    vlSelf->Main__DOT__idu__DOT___contr_code_T_446 = VL_RAND_RESET_I(2);
+    vlSelf->Main__DOT__idu__DOT___contr_code_T_549 = VL_RAND_RESET_I(4);
     vlSelf->Main__DOT__exu__DOT__mem_Rdata = VL_RAND_RESET_Q(64);
     vlSelf->Main__DOT__exu__DOT__Regs_1 = VL_RAND_RESET_Q(64);
     vlSelf->Main__DOT__exu__DOT__Regs_2 = VL_RAND_RESET_Q(64);
@@ -96,7 +97,6 @@ VL_ATTR_COLD void VMain___024root___ctor_var_reset(VMain___024root* vlSelf) {
     vlSelf->Main__DOT__exu__DOT___pc_T_1 = VL_RAND_RESET_Q(64);
     vlSelf->Main__DOT__exu__DOT___pc_T_8 = VL_RAND_RESET_Q(64);
     vlSelf->Main__DOT__exu__DOT___pc_T_19 = VL_RAND_RESET_Q(64);
-    vlSelf->Main__DOT__exu__DOT___pc_T_23 = VL_RAND_RESET_Q(64);
     for (int __Vi0=0; __Vi0<33; ++__Vi0) {
         vlSelf->Main__DOT__exu__DOT__difftest__DOT__rf[__Vi0] = VL_RAND_RESET_Q(64);
     }
