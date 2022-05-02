@@ -16,6 +16,11 @@ long ld(char *img_file);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_disasm(const char *triple);
 
+#ifdef CONFIG_ITRACE
+char itrace_buf[100] = {0};
+int itrace_buf_cnt = 0;
+#endif
+
 void exit_npc(int flag)
 {
 #ifdef CONFIG_VCD
@@ -43,11 +48,11 @@ void init_npc()
 void exec_once()
 {
   cpu_sim_once();
+#ifdef CONFIG_ITRACE
   char p[100] = {0};
-  puts("123");
+  disassemble(p, 100, cpu_npc.pc, (uint8_t *)&top->io_Inst, 4);
   printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
-  disassemble(p, 100, cpu_npc.pc, (uint8_t*)&top->io_Inst, 4);
-  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
+#endif
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
 #endif
@@ -81,8 +86,11 @@ int main(int argc, char **argv, char **env)
   contextp = new VerilatedContext;
   contextp->commandArgs(argc, argv);
   top = new VMain{contextp};
+
+#ifdef CONFIG_ITRACE
   init_disasm("riscv64-pc-linux-gnu");
-  
+#endif
+
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
