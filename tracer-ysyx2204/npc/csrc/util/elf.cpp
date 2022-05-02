@@ -71,7 +71,7 @@ void read_elf(char *elf_name)
     }
     FILE *stream;
     stream = fopen(elf_name, "rb");
-    Assert(stream, "Can not open '%s'", elf_name);
+    assert(stream);
 
     unsigned char *buffer;
     buffer = (unsigned char *)malloc(100500 * sizeof(unsigned char));
@@ -110,7 +110,7 @@ void read_elf(char *elf_name)
     }
 
     //for (int i = 0; i < elf_cnt; i++)
-    //    Log("%lx %lx %s", elf_func[i].fun_addr, elf_func[i].fun_size, elf_func[i].fun_name);
+    //    printf("%lx %lx %s", elf_func[i].fun_addr, elf_func[i].fun_size, elf_func[i].fun_name);
     return;
 }
 #endif
