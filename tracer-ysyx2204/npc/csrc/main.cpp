@@ -70,15 +70,15 @@ int main(int argc, char **argv, char **env)
 {
   parse_args(argc, argv);
 
+  contextp = new VerilatedContext;
+  contextp->commandArgs(argc, argv);
+  top = new VMain{contextp};
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
   top->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 #endif
-  contextp = new VerilatedContext;
-  contextp->commandArgs(argc, argv);
-  top = new VMain{contextp};
   init_npc();
 
 #ifdef CONFIG_DIFFTEST
