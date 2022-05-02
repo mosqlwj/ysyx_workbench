@@ -14,6 +14,7 @@ int check_regs_npc(CPU_state ref_cpu);
 void init_so(char *ref_so_file, long img_size);
 long ld(char *img_file);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+void init_disasm(const char *triple);
 
 void exit_npc(int flag)
 {
@@ -80,6 +81,7 @@ int main(int argc, char **argv, char **env)
   contextp = new VerilatedContext;
   contextp->commandArgs(argc, argv);
   top = new VMain{contextp};
+  init_disasm("riscv64-pc-linux-gnu");
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
