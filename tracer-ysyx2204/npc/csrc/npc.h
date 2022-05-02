@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#define MUXDEF(macro, X, Y)  MUX_MACRO_PROPERTY(__P_DEF_, macro, X, Y)
+
 typedef uint64_t word_t;
 typedef word_t vaddr_t;
 typedef uint32_t paddr_t;
