@@ -41,6 +41,10 @@ void init_npc()
 void exec_once()
 {
   cpu_sim_once();
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  char p[100] = {0};
+  disassemble(p, 100, cpu_npc.pc, top->inst, 4);
+  printf("pc=%lx,inst=%lx,disassm=%s", cpu_npc.pc, top->inst, p);
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
 #endif
