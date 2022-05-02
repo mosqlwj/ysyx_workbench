@@ -38,9 +38,12 @@ VM_USER_CFLAGS = \
 	-fpermissive \
 	-I \
 	/home/wcx/Desktop/ysyx-workbench/npc/csrc/ \
+	-I \
+	/usr/lib/llvm-11/include \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
+	-lLLVM-11 \
 	-ldl \
 
 # User .cpp files (from .cpp's on Verilator command line)
