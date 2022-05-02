@@ -32,7 +32,7 @@ void pmem_read(long long Raddr, long long *Rdata)
   (*Rdata) = *((long long *)guest_to_host(Raddr));
   // printf("READ DATA %lx %lx\n", Raddr, Rdata);
 #ifdef CONFIG_MTRACE
-  sprintf(mtrace_buf[mtrace_count],"read:  addr:%016x len:%02d content:%016lx",Raddr,(*Rdata));
+  sprintf(mtrace_buf[mtrace_count],"read:  addr:%016x content:%016lx",Raddr,(*Rdata));
   mtrace_count=(mtrace_count+1)%16;
 #endif
   return;
