@@ -46,7 +46,7 @@ void exec_once()
   char p[100] = {0};
   puts("123");
   printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
-  disassemble(p, 100, cpu_npc.pc, &top->io_Inst, 4);
+  disassemble(p, 100, cpu_npc.pc, (uint8_t*)&top->io_Inst, 4);
   printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
