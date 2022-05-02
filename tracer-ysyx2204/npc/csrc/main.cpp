@@ -59,7 +59,10 @@ static int parse_args(int argc, char *argv[])
   if (argc == 2)
   {
     if (strlen(argv[1]) != 0)
+    {
       img_file = argv[1];
+      img_size = ld(img_file);
+    }
   }
   return 0;
 }
