@@ -15,7 +15,7 @@ void init_so(char *ref_so_file, long img_size);
 long ld(char *img_file);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_disasm(const char *triple);
-
+void print_itrace();
 #ifdef CONFIG_ITRACE
 char itrace_buf[16][100] = {0};
 int itrace_buf_cnt = 0;
