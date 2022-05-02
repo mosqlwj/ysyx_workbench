@@ -81,3 +81,5 @@ extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int
   assert((int)s.length() - skip < size);
   strcpy(str, p);
 }
+./nemu/src/utils/filelist.mk:CXXFLAGS += $(shell llvm-config --cxxflags) -fPIE
+./nemu/src/utils/filelist.mk:LIBS += $(shell llvm-config --libs)
