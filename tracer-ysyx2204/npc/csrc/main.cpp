@@ -16,6 +16,7 @@ long ld(char *img_file);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_disasm(const char *triple);
 void print_itrace();
+void print_mtrace();
 
 #ifdef CONFIG_ITRACE
 char itrace_buf[16][100] = {0};
@@ -29,6 +30,9 @@ void exit_npc(int flag)
 #endif
 #ifdef CONFIG_ITRACE
   print_itrace();
+#endif
+#ifdef CONFIG_MTRACE
+  print_mtrace();
 #endif
   delete top;
   delete contextp;
