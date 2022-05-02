@@ -4,10 +4,10 @@ mill = ./mill/mill
 TOPNAME = Main
 VSRCNAME = Main
 IMG = ""
-CSRCDIRS = ./csrc
-VSRCDIRS = ./vsrc
-CSRC = $(foreach dir, $(CSRCDIRS), $(wildcard $(dir)/*.cpp))
-VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(VSRCDIRS), $(wildcard $(dir)/*.v)))
+SRCDIR = ./
+SRCDIRS = $(shell find $(SRCDIR) -maxdepth 5 -type d)
+CSRC = $(foreach dir, $(SRCDIR), $(wildcard $(dir)/*.cpp))
+VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(SRCDIR), $(wildcard $(dir)/*.v)))
 
 test:
 	$(mill) -i __.test
