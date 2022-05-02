@@ -21,7 +21,7 @@ static llvm::MCSubtargetInfo *gSTI = nullptr;
 static llvm::MCInstPrinter *gIP = nullptr;
 
 void init_disasm(const char *triple) {
-puts("1223");
+puts(triple);
 
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargetMCs();
