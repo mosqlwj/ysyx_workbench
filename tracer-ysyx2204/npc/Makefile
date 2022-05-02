@@ -8,12 +8,9 @@ CSRCDIR = ./csrc
 VSRCDIR = ./vsrc
 CSRCDIRS = $(shell find $(CSRCDIR) -maxdepth 5 -type d)
 VSRCDIRS = $(shell find $(VSRCDIR) -maxdepth 5 -type d)
-
 CSRC = $(foreach dir, $(CSRCDIRS), $(wildcard $(dir)/*.cpp))
 VSRC = $(filter-out %/$(VSRCNAME).v, $(foreach dir, $(VSRCDIRS), $(wildcard $(dir)/*.v)))
 
-all:
-	@echo 
 test:
 	$(mill) -i __.test
 

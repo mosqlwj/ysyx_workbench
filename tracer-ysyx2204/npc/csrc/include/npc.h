@@ -25,6 +25,7 @@ typedef struct
 #define CONFIG_VCD 1
 #define CONFIG_ITRACE 1
 #define CONFIG_MTRACE 1
+#define CONFIG_FTRACE 1
 
 #ifdef CONFIG_DIFFTEST
 enum
