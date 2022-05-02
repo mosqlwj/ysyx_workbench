@@ -4,6 +4,8 @@ CPU_state cpu_npc;
 vluint64_t sim_time = 0;
 VMain *top = nullptr;
 VerilatedContext *contextp = nullptr;
+long img_size = 0;
+char *img_file = nullptr;
 #ifdef CONFIG_VCD
 VerilatedVcdC *m_trace = nullptr;
 #endif
@@ -38,6 +40,9 @@ void init_npc()
 
 void exec_once()
 {
+  contextp = new VerilatedContext;
+  contextp->commandArgs(argc, argv);
+  top = new VMain{contextp};
   cpu_sim_once();
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
@@ -52,21 +57,18 @@ void exec_once()
     exit_npc(-1);
 #endif
 }
-
-int main(int argc, char **argv, char **env)
+static int parse_args(int argc, char *argv[])
 {
-  long size = 0;
   if (argc == 2)
   {
     if (strlen(argv[1]) != 0)
-    {
-      printf("ld:%s\n", argv[1]);
-      size = ld(argv[1]);
-    }
+      img_file = argv[1];
   }
-  contextp = new VerilatedContext;
-  contextp->commandArgs(argc, argv);
-  top = new VMain{contextp};
+  return 0;
+}
+int main(int argc, char **argv, char **env)
+{
+  parse_args(argc, argv);
 
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
