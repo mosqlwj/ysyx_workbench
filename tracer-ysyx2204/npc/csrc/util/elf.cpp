@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <common.h>
 
 #ifdef CONFIG_FTRACE
 
@@ -67,7 +66,7 @@ void read_elf(char *elf_name)
 {
     if (elf_name == NULL)
     {
-        Log("no input elf file");
+        puts("no input elf file");
         return;
     }
     FILE *stream;
