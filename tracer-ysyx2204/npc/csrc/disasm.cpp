@@ -21,6 +21,8 @@ static llvm::MCSubtargetInfo *gSTI = nullptr;
 static llvm::MCInstPrinter *gIP = nullptr;
 
 void init_disasm(const char *triple) {
+puts("1223");
+
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargetMCs();
   llvm::InitializeAllAsmParsers();
@@ -71,7 +73,7 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
   llvm::ArrayRef<uint8_t> arr(code, nbyte);
   uint64_t dummy_size = 0;
   gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
-puts("123");
+
   std::string s;
   raw_string_ostream os(s);
   
