@@ -40,9 +40,6 @@ void init_npc()
 
 void exec_once()
 {
-  contextp = new VerilatedContext;
-  contextp->commandArgs(argc, argv);
-  top = new VMain{contextp};
   cpu_sim_once();
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
@@ -76,7 +73,9 @@ int main(int argc, char **argv, char **env)
   top->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 #endif
-
+  contextp = new VerilatedContext;
+  contextp->commandArgs(argc, argv);
+  top = new VMain{contextp};
   init_npc();
 
 #ifdef CONFIG_DIFFTEST
