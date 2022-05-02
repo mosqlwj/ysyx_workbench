@@ -5,7 +5,7 @@ TOPNAME = Main
 VSRCNAME = Main
 IMG = ""
 CSRCDIR = ./csrc
-VSRCDIR = ./csrc
+VSRCDIR = ./vsrc
 CSRCDIRS = $(shell find $(CSRCDIR) -maxdepth 5 -type d)
 VSRCDIRS = $(shell find $(VSRCDIR) -maxdepth 5 -type d)
 
