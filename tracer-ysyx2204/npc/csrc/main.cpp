@@ -45,9 +45,9 @@ void exec_once()
   cpu_sim_once();
   char p[100] = {0};
   puts("123");
-  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
+  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, &top->io_Inst, p);
   disassemble(p, 100, cpu_npc.pc, top->io_Inst, 4);
-  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, top->io_Inst, p);
+  printf("pc=%lx,inst=%lx,disassem=%s\n", cpu_npc.pc, &top->io_Inst, p);
 #ifdef CONFIG_VCD
   m_trace->dump(sim_time++);
 #endif
@@ -82,7 +82,7 @@ int main(int argc, char **argv, char **env)
   contextp->commandArgs(argc, argv);
   top = new VMain{contextp};
   init_disasm("riscv64-pc-linux-gnu");
-  
+
 #ifdef CONFIG_VCD
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
