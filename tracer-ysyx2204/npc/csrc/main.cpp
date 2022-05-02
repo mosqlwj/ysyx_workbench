@@ -13,6 +13,7 @@ VerilatedVcdC *m_trace = nullptr;
 int check_regs_npc(CPU_state ref_cpu);
 void init_so(char *ref_so_file, long img_size);
 long ld(char *img_file);
+void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
 void exit_npc(int flag)
 {
@@ -41,7 +42,6 @@ void init_npc()
 void exec_once()
 {
   cpu_sim_once();
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   char p[100] = {0};
   disassemble(p, 100, cpu_npc.pc, top->io_Inst, 4);
   printf("pc=%lx,inst=%lx,disassm=%s", cpu_npc.pc, top->io_Inst, p);
