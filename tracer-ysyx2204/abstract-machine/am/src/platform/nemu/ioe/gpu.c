@@ -23,7 +23,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  printf("%d\n",ctl->sync);
   if (ctl->sync) {
     printf("%d %d\n",ctl->w,ctl->h);
     printf("%d 1 %d\n",ctl->x,ctl->y);
