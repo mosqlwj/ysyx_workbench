@@ -38,6 +38,8 @@ int vsprintf(char *out, const char *fmt, va_list ap)
     case 'd':
       num_b_cnt = 0;
       num = va_arg(ap, int);
+      if (num == 0)
+        num_b[++num_b_cnt] = 0;
       while (num != 0)
       {
         num_b[++num_b_cnt] = num % 10;
@@ -50,6 +52,10 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       str = va_arg(ap, char *);
       for (int i = 0; str[i]; i++)
         out[cnt++] = str[i];
+      break;
+    case 'c':
+      num = va_arg(ap, int);
+      out[cnt++] = (char)num;
       break;
     }
     i++;
