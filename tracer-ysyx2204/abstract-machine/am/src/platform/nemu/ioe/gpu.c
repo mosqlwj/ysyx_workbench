@@ -27,11 +27,11 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   printf("xy %d %d\n",ctl->x,ctl->y);
   printf("wh %d %d\n",ctl->w,ctl->h);
   int cnt=0;
-  for (int i = 0; i < ctl->w; i ++){
-    for(int j = 0; j < ctl->h ; j ++){
+  for(int j = 0; j < ctl->h ; j ++){
+    for (int i = 0; i < ctl->w; i ++){
       int p = ctl->x + i;
       int q = ctl->y + j;
-      fb[p * width + q] = ((uint32_t*)ctl->pixels)[++cnt];
+      fb[p * height + q] = ((uint32_t*)ctl->pixels)[++cnt];
     }
   }
   if (ctl->sync) {
