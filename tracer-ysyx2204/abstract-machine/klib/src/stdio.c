@@ -57,6 +57,8 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       num = va_arg(ap, int);
       out[cnt++] = (char)num;
       break;
+    default :
+      break;
     }
     i++;
   }
