@@ -6,8 +6,9 @@
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd)
 {
-  int keycode = inl(KBD_ADDR) % KEY_QUEUE_LEN;
-  int keydown = inl(KBD_ADDR) & KEYDOWN_MASK;
+  uint32_t key = inl(KBD_ADDR);
+  int keycode = key % KEY_QUEUE_LEN;
+  int keydown = key & KEYDOWN_MASK;
   if (keycode == AM_KEY_NONE)
   {
     kbd->keydown = false;
@@ -15,8 +16,7 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd)
   }
   else
   {
-    printf("%d\n",keydown);
-    printf("%d\n",inl(KBD_ADDR));
+    printf("%d\n",key);
     if (keydown != 0)
       kbd->keydown = true;
     else
