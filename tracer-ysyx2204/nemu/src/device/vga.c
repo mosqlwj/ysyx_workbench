@@ -58,11 +58,14 @@ static inline void update_screen() {
 void vga_update_screen() {
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+  if(*(vgactl_port_base+4)==true)
+  {
+    update_screen();
+  }
 }
 
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
-  Log("%d %d\n",screen_width() , screen_height());
   vgactl_port_base[0] = (screen_width() << 16) | screen_height(); 
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
