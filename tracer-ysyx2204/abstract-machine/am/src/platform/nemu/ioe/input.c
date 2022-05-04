@@ -15,6 +15,7 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd)
   }
   else
   {
+    printf("%d\n",keydown);
     if (keydown != 0)
       kbd->keydown = true;
     else
