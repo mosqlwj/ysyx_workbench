@@ -41,6 +41,8 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       num = va_arg(ap, int);
       if (num == 0)
         num_b[++num_b_cnt] = 0;
+      else if (num < 0)
+        out[cnt++] = '-', num = -num;
       while (num != 0)
       {
         num_b[++num_b_cnt] = num % 10;
@@ -58,7 +60,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       chr = va_arg(ap, int);
       out[cnt++] = chr;
       break;
-    default :
+    default:
       break;
     }
     i++;
