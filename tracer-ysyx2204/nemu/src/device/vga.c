@@ -62,7 +62,7 @@ void vga_update_screen() {
   if(*(vgactl_port_base+4)!=0)
   {
     update_screen();
-    (*(vgactl_port_base+4))=0;
+    (*(vgactl_port_base+1))=0;
   }
 }
 
