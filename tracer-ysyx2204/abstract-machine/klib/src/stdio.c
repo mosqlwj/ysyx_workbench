@@ -45,7 +45,6 @@ int vprintf(const char *fmt, va_list ap)
 }
 int printf(const char *fmt, ...)
 {
-  // panic("Not implemented");
   va_list args;
   va_start(args, fmt);
   int siz = vprintf(fmt, args);
