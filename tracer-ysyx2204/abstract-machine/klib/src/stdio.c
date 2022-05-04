@@ -8,7 +8,7 @@
 int printf(const char *fmt, ...)
 {
   // panic("Not implemented");
-  char out[1048];
+  char out[4096];
   va_list va_ptr;
   va_start(va_ptr, fmt);
   int cnt = 0;
