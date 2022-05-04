@@ -25,8 +25,8 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    printf("%d %d\n",ctl->x,ctl->y);
-    printf("%d %d\n",ctl->w,ctl->h);
+    printf("xy %d %d\n",ctl->x,ctl->y);
+    printf("wh %d %d\n",ctl->w,ctl->h);
     int cnt=0;
     for (int i = 0; i < ctl->w; i ++){
       for(int j = 0; j < ctl->h ; j ++){
