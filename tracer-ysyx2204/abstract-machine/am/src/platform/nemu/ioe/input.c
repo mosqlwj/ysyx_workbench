@@ -3,10 +3,11 @@
 #include <stdio.h>
 #define KEYDOWN_MASK 0x8000
 #define KEY_QUEUE_LEN 1024
-bool is_down[256] = {0};
+
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd)
 {
   int keycode = inl(KBD_ADDR) % KEY_QUEUE_LEN;
+  int keydown = inl(KBD_ADDR) & KEYDOWN_MASK;
   if (keycode == AM_KEY_NONE)
   {
     kbd->keydown = false;
@@ -14,11 +15,10 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd)
   }
   else
   {
-    if (is_down[keycode])
-      kbd->keydown = false;
-    else
+    if (keydown != 0)
       kbd->keydown = true;
-    is_down[keycode] = !is_down[keycode];
+    else
+      kbd->keydown = false;
     kbd->keycode = keycode;
   }
 }
