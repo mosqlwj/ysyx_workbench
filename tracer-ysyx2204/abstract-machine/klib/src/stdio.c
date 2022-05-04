@@ -4,13 +4,9 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-
-int printf(const char *fmt, ...)
+int vprintf(const char *fmt, va_list ap)
 {
-  // panic("Not implemented");
   char out[4096];
-  va_list va_ptr;
-  va_start(va_ptr, fmt);
   int cnt = 0;
   for (int i = 0; fmt[i]; i++)
   {
@@ -26,7 +22,7 @@ int printf(const char *fmt, ...)
     {
     case 'd':
       num_b_cnt = 0;
-      num = va_arg(va_ptr, int);
+      num = va_arg(ap, int);
       while (num != 0)
       {
         num_b[++num_b_cnt] = num % 10;
@@ -36,7 +32,7 @@ int printf(const char *fmt, ...)
         out[cnt++] = (char)(num_b[i] + '0');
       break;
     case 's':
-      str = va_arg(va_ptr, char *);
+      str = va_arg(ap, char *);
       for (int i = 0; str[i]; i++)
         out[cnt++] = str[i];
       break;
@@ -45,18 +41,20 @@ int printf(const char *fmt, ...)
   }
   out[cnt++] = '\0';
   putstr(out);
-  return 0;
+  return cnt;
+}
+int printf(const char *fmt, ...)
+{
+  // panic("Not implemented");
+  va_list args;
+  va_start(args, fmt);
+  int siz = vprintf(fmt, args);
+  va_end(args);
+  return siz;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap)
 {
-  panic("Not implemented");
-}
-
-int sprintf(char *out, const char *fmt, ...)
-{
-  va_list va_ptr;
-  va_start(va_ptr, fmt);
   int cnt = 0;
   for (int i = 0; fmt[i]; i++)
   {
@@ -72,7 +70,7 @@ int sprintf(char *out, const char *fmt, ...)
     {
     case 'd':
       num_b_cnt = 0;
-      num = va_arg(va_ptr, int);
+      num = va_arg(ap, int);
       while (num != 0)
       {
         num_b[++num_b_cnt] = num % 10;
@@ -82,7 +80,7 @@ int sprintf(char *out, const char *fmt, ...)
         out[cnt++] = (char)(num_b[i] + '0');
       break;
     case 's':
-      str = va_arg(va_ptr, char *);
+      str = va_arg(ap, char *);
       for (int i = 0; str[i]; i++)
         out[cnt++] = str[i];
       break;
@@ -90,7 +88,16 @@ int sprintf(char *out, const char *fmt, ...)
     i++;
   }
   out[cnt++] = '\0';
-  return 0;
+  return cnt;
+}
+
+int sprintf(char *out, const char *fmt, ...)
+{
+  va_list args;
+  va_start(args, fmt);
+  int siz = vsprintf(out, fmt, args);
+  va_end(args);
+  return siz;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...)
