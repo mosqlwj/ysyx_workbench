@@ -33,6 +33,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
     int num = 0, num_b_cnt = 0;
     int num_b[20] = {0};
     char *str = NULL;
+    char chr;
     switch (fmt[i + 1])
     {
     case 'd':
@@ -54,8 +55,8 @@ int vsprintf(char *out, const char *fmt, va_list ap)
         out[cnt++] = str[i];
       break;
     case 'c':
-      num = va_arg(ap, int);
-      out[cnt++] = (char)num;
+      chr = va_arg(ap, int);
+      out[cnt++] = chr;
       break;
     default :
       break;
