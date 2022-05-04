@@ -5,10 +5,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 static unsigned long int next = 1;
 
-extern char _heap_start;
-#define PMEM_SIZE (128 * 1024 * 1024)
-#define PMEM_END ((uintptr_t)0x80000000 + PMEM_SIZE)
-Area heap = RANGE(&_heap_start, PMEM_END);
+extern Area heap;
 char *hbrk = NULL;
 
 int rand(void) {
