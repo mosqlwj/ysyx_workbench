@@ -20,7 +20,7 @@ paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 #ifdef CONFIG_MTRACE_COND
 void print_mtrace()
 {
-  puts("mtrace:");
+  printf("mtrace:\n");
   for(int i=0;i<16;i++)
   {
     if(strlen(mtrace_buf[i])==0)

@@ -25,7 +25,7 @@ int iringbuf_count = 0;
 void print_itrace()
 {
 #ifdef CONFIG_ITRACE_COND
-  puts("itrace:");
+  printf("itrace:\n");
   for (int i = 0; i < 16; i++)
   {
     if (strlen(iringbuf[i]) == 0)
