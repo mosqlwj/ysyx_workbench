@@ -1,7 +1,6 @@
 #include <elf.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <common.h>
 
 #ifdef CONFIG_FTRACE_COND
@@ -76,7 +75,7 @@ void read_elf(char *elf_name)
     unsigned char *buffer;
     buffer = (unsigned char *)malloc(100500 * sizeof(unsigned char));
     int ret = fread(buffer, sizeof(unsigned char), 100500, stream);
-    assert(ret != 0);
+    Assert(ret != 0, "Can not open '%s'", elf_name);
 
     Elf64_Ehdr *ehdr = (Elf64_Ehdr *)buffer;
     Elf64_Shdr *shdr = (Elf64_Shdr *)(buffer + ehdr->e_shoff);
