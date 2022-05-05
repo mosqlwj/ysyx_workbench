@@ -147,11 +147,18 @@ config ITRACE_COND
   default "true"
 
 config MTRACE_COND
-  bool "Weather open mtrace"
+  depends on TRACE
+  bool "Enable mtrace"
   default y
 
 config FTRACE_COND
-  bool "Weather open ftrace"
+  depends on TRACE
+  bool "Enable ftrace"
+  default y
+
+config DTRACE_COND
+  depends on TRACE
+  bool "Enable dtrace"
   default y
 
 config DIFFTEST

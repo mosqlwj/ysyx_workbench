@@ -171,6 +171,10 @@ void cpu_exec(uint64_t n)
       void print_mtrace();
       print_mtrace();
 #endif
+#ifdef CONFIG_DTRACE_COND
+      void print_dtrace();
+      print_dtrace();
+#endif
     }
     // fall through
   case NEMU_QUIT:

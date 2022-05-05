@@ -7,6 +7,27 @@
 
 static uint8_t *io_space = NULL;
 static uint8_t *p_space = NULL;
+#ifdef CONFIG_DTRACE_COND
+char dtrace_buf[16][100]={0};
+int dtrace_count=0;
+#endif
+
+#ifdef CONFIG_DTRACE_COND
+void print_dtrace()
+{
+  printf("dtrace:\n");
+  for(int i=0;i<16;i++)
+  {
+    if(strlen(dtrace_buf[i])==0)
+      break;
+    if((i+1)%16==dtrace_count)
+      printf("-->");
+    else
+      printf("   ");
+    printf("%s\n",dtrace_buf[i]);
+  }
+}
+#endif
 
 uint8_t* new_space(int size) {
   uint8_t *p = p_space;
@@ -43,6 +64,10 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
+#ifdef CONFIG_DTRACE_COND
+  sprintf(dtrace_buf[dtrace_count],"read: addr:%016x len:%02d name=%s content:%016lx",addr,len,map->name,ret);
+  dtrace_count=(dtrace_count+1)%16;
+#endif
   return ret;
 }
 
@@ -51,5 +76,9 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
+#ifdef CONFIG_DTRACE_COND
+  sprintf(dtrace_buf[dtrace_count],"write:addr:%016x len:%02d name=%s content:%016lx",addr,len,map->name,data);
+  dtrace_count=(dtrace_count+1)%16;
+#endif
   invoke_callback(map->callback, offset, len, true);
 }

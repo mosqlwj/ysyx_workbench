@@ -128,8 +128,14 @@ static int cmd_print(char *args)
     print_mtrace();
 #endif
   }
-  else
-    if(strcmp(args, "ftrace") == 0)
+  else if(strcmp(args, "dtrace") == 0)
+  {
+#ifdef CONFIG_DTRACE_COND
+    void print_dtrace();
+    print_dtrace();
+#endif
+  }
+  else if(strcmp(args, "ftrace") == 0)
     {
 #ifdef CONFIG_MTRACE_COND
       void print_ftrace();
